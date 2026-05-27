@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Birthday Memory </title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  overflow:hidden;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#000;
+  font-family:sans-serif;
+}
+
+.bgImage{
+
+  position:fixed;
+  inset:0;
+
+  background-size:cover;
+  background-position:center;
+
+  filter:
+  blur(4px)
+  brightness(.45);
+
+  transform:scale(1.25);
+
+  animation:bgZoom 8s linear forwards;
+
+  transition:background-image 1s ease;
+
+  z-index:-10;
+
+}
+
+@keyframes bgZoom{
+
+  from{
+    transform:scale(1.25);
+  }
+
+  to{
+    transform:scale(1);
+  }
+
+}
+
+.bgOverlay{
+
+  position:fixed;
+  inset:0;
+
+  background:
+  rgba(255,255,255,.08);
+
+  backdrop-filter:blur(6px);
+
+  z-index:-9;
+
+}
+
+/* SPARKLES */
+
+.sparkles{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+}
+
+.spark{
+
+  position:absolute;
+
+  width:3px;
+  height:3px;
+
+  border-radius:50%;
+
+  background:white;
+
+  animation:twinkle 3s infinite alternate;
+
+}
+
+@keyframes twinkle{
+
+  from{
+    opacity:.2;
+    transform:scale(1);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1.7);
+  }
+
+}
+
+/* HEART RAIN */
+
+.heartRain{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.heart{
+
+  position:absolute;
+
+  top:-10%;
+
+  opacity:.15;
+
+  animation:fall linear forwards;
+
+}
+
+@keyframes fall{
+
+  from{
+
+    transform:
+    translateY(-10vh)
+    rotate(0deg);
+
+  }
+
+  to{
+
+    transform:
+    translateY(120vh)
+    rotate(180deg);
+
+  }
+
+}
+
+/* MAIN */
+
+.container{
+  width:340px;
+  position:relative;
+  z-index:10;
+}
+
+.imageBox{
+
+  width:100%;
+  height:500px;
+
+  overflow:hidden;
+
+  position:relative;
+
+  border-radius:30px;
+
+  box-shadow:
+  0 20px 60px rgba(0,0,0,.4);
+
+}
+
+.imageBox img{
+
+  position:absolute;
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+
+  opacity:0;
+
+  transition:
+  opacity 1s ease,
+  transform 8s linear;
+
+  transform:scale(1.18);
+
+}
+
+.imageBox img.active{
+
+  opacity:1;
+  transform:scale(1);
+
+}
+
+.imageBox::after{
+
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:-120%;
+
+  width:60%;
+  height:100%;
+
+  background:
+  linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,.2),
+    transparent
+  );
+
+  transform:skewX(-25deg);
+
+  animation:shine 7s infinite;
+
+}
+
+@keyframes shine{
+
+  0%{
+    left:-120%;
+  }
+
+  40%{
+    left:140%;
+  }
+
+  100%{
+    left:140%;
+  }
+
+}
+
+/* CAPTION */
+
+.caption{
+
+  margin-top:22px;
+
+  text-align:center;
+
+  color:white;
+
+  font-size:34px;
+
+  line-height:1.5;
+
+  font-family:'Great Vibes', cursive;
+
+  animation:floatText 4s ease infinite;
+
+}
+
+@keyframes floatText{
+
+  0%,100%{
+    transform:translateY(0);
+  }
+
+  50%{
+    transform:translateY(-6px);
+  }
+
+}
+
+/* COUNTER */
+
+.memoryCounter{
+
+  position:fixed;
+
+  bottom:18px;
+  left:18px;
+
+  color:white;
+
+  font-size:14px;
+
+  opacity:.8;
+
+}
+
+.liveClock{
+
+  position:fixed;
+
+  bottom:18px;
+  right:18px;
+
+  color:white;
+
+  font-size:13px;
+
+  opacity:.8;
+
+}
+
+/* ENDING */
+
+#endingScene{
+
+  position:fixed;
+  inset:0;
+
+  display:flex;
+  flex-direction:column;
+
+  justify-content:center;
+  align-items:center;
+
+  gap:25px;
+
+  background:
+  rgba(0,0,0,.65);
+
+  backdrop-filter:blur(12px);
+
+  opacity:0;
+
+  pointer-events:none;
+
+  transition:2s;
+
+  z-index:5000;
+
+}
+
+.endingText{
+
+  color:white;
+
+  text-align:center;
+
+  font-size:58px;
+
+  line-height:1.5;
+
+  font-family:'Great Vibes', cursive;
+
+}
+
+.voiceBtn{
+
+  border:none;
+
+  padding:16px 28px;
+
+  border-radius:40px;
+
+  background:
+  rgba(255,255,255,.15);
+
+  color:white;
+
+  backdrop-filter:blur(10px);
+
+  cursor:pointer;
+
+}
+
+/* SECRET */
+
+.secretMessage{
+
+  position:fixed;
+
+  top:50%;
+  left:50%;
+
+  transform:
+  translate(-50%,-50%);
+
+  padding:18px 26px;
+
+  border-radius:24px;
+
+  background:
+  rgba(255,255,255,.15);
+
+  color:white;
+
+  font-size:24px;
+
+  opacity:0;
+
+  transition:1s;
+
+  backdrop-filter:blur(10px);
+
+  z-index:6000;
+
+}
+
+/* FINAL TEXT */
+
+.finalWish{
+
+  position:fixed;
+
+  bottom:90px;
+
+  width:100%;
+
+  text-align:center;
+
+  color:white;
+
+  font-size:36px;
+
+  font-family:'Great Vibes', cursive;
+
+  opacity:0;
+
+  transition:2s;
+
+  z-index:5500;
+
+}
+
+/* WISH BOX */
+
+#wishBox{
+
+  position:fixed;
+  inset:0;
+
+  display:flex;
+
+  justify-content:center;
+  align-items:center;
+
+  background:
+  rgba(0,0,0,.6);
+
+  backdrop-filter:blur(10px);
+
+  opacity:0;
+
+  pointer-events:none;
+
+  transition:1s;
+
+  z-index:10000;
+
+}
+
+.wishCard{
+
+  width:90%;
+  max-width:420px;
+
+  padding:28px;
+
+  border-radius:28px;
+
+  background:
+  rgba(255,255,255,.12);
+
+  backdrop-filter:blur(14px);
+
+  text-align:center;
+
+}
+
+.wishCard h2{
+
+  color:white;
+
+  font-size:44px;
+
+  margin-bottom:20px;
+
+  font-family:'Great Vibes', cursive;
+
+}
+
+#wishText{
+
+  width:100%;
+  height:140px;
+
+  border:none;
+  outline:none;
+
+  resize:none;
+
+  border-radius:20px;
+
+  padding:16px;
+
+  font-size:16px;
+
+  background:
+  rgba(255,255,255,.15);
+
+  color:white;
+
+}
+
+#wishText::placeholder{
+
+  color:
+  rgba(255,255,255,.7);
+
+}
+
+.wishCard button{
+
+  margin-top:20px;
+
+  border:none;
+
+  padding:14px 22px;
+
+  border-radius:40px;
+
+  cursor:pointer;
+
+}
+
+/* LAST NOTE */
+
+#lastNote{
+
+  position:fixed;
+  inset:0;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  background:
+  rgba(0,0,0,.82);
+
+  backdrop-filter:blur(14px);
+
+  opacity:0;
+
+  transition:2s;
+
+  z-index:9000;
+
+}
+
+.lastNoteCard{
+
+  width:90%;
+  max-width:500px;
+
+  padding:38px 28px;
+
+  border-radius:34px;
+
+  background:
+  rgba(255,255,255,.08);
+
+  border:
+  1px solid rgba(255,255,255,.12);
+
+  backdrop-filter:blur(18px);
+
+  text-align:center;
+
+  animation:cardFloat 5s ease infinite;
+
+}
+
+@keyframes cardFloat{
+
+  0%,100%{
+    transform:translateY(0);
+  }
+
+  50%{
+    transform:translateY(-8px);
+  }
+
+}
+
+.lastTitle{
+
+  color:white;
+
+  font-size:52px;
+
+  margin-bottom:30px;
+
+  font-family:'Great Vibes', cursive;
+
+}
+
+.lastLines{
+
+  color:white;
+
+  line-height:2;
+
+  font-size:18px;
+
+  opacity:.92;
+
+}
+
+/* MOBILE */
+
+@media(max-width:480px){
+
+  .container{
+    width:92vw;
+  }
+
+  .imageBox{
+    height:72vh;
+  }
+
+  .caption{
+    font-size:28px;
+  }
+
+  .endingText{
+    font-size:42px;
+  }
+
+  .lastTitle{
+    font-size:40px;
+  }
+
+  .lastLines{
+    font-size:16px;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="bgImage" id="bgImage"></div>
+
+<div class="bgOverlay"></div>
+
+<div class="sparkles" id="sparkles"></div>
+
+<div class="heartRain" id="bgRain"></div>
+
+<div class="memoryCounter" id="memoryCounter">
+Memory 01 / 16
+</div>
+
+<div class="liveClock" id="liveClock"></div>
+
+<div class="container" id="slider">
+
+  <div class="imageBox">
+
+    <img src="img1.jpg" class="active">
+    <img src="img2.jpg">
+    <img src="img3.jpg">
+    <img src="img4.jpg">
+    <img src="img5.jpg">
+    <img src="img6.jpg">
+    <img src="img7.jpg">
+    <img src="img8.jpg">
+    <img src="img9.jpg">
+    <img src="img10.jpg">
+    <img src="img11.jpg">
+    <img src="img12.jpg">
+    <img src="img13.jpg">
+    <img src="img14.jpg">
+    <img src="img15.jpg">
+    <img src="img16.jpg">
+
+  </div>
+
+  <div class="caption" id="caption"></div>
+
+</div>
+
+<div id="endingScene">
+
+  <div class="endingText">
+
+    Happy Birthday Jaan <br>
+    Khushbu 
+
+  </div>
+
+  <button class="voiceBtn" onclick="playFinal()">
+    Open Final Surprise 
+  </button>
+
+</div>
+
+<div class="secretMessage" id="secretMessage">
+you found the secret 
+</div>
+
+<div class="finalWish" id="finalWish">
+Now close your eyes and make a wish 
+</div>
+
+<div id="wishBox">
+
+  <div class="wishCard">
+
+    <h2>Leave Your Wish </h2>
+
+    <textarea
+    id="wishText"
+    placeholder="Type your birthday wish here... "></textarea>
+
+    <button onclick="sendWish()">
+      Send Wish on WhatsApp 
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+const images =
+document.querySelectorAll(".imageBox img");
+
+const caption =
+document.getElementById("caption");
+
+const bgImage =
+document.getElementById("bgImage");
+
+let index = 0;
+
+const texts = [
+
+"The day my favorite person was born ",
+
+"Some people enter quietly… then become your entire world ",
+
+"Every memory with you feels softer than moonlight ",
+
+"You turned ordinary moments into forever memories ",
+
+"Every photo hides a heartbeat of us ",
+
+"Tum meri sukoon bhi ho… aur meri smile ka reason bhi ",
+
+"You are the feeling songs spend years trying to describe ",
+
+"And in every lifetime… I’d still choose you ",
+
+"Even the stars look prettier when you smile ",
+
+"Your birthday feels more special to me than any festival ",
+
+"If memories had a fragrance… they would smell like you ",
+
+"Some souls are meant to feel like home ",
+
+"You made my chaos feel beautiful ",
+
+"With you… even silence feels comforting ",
+
+"Every second with you became a story worth remembering ",
+
+"And somehow… my heart still pauses when I see you "
+
+];
+
+caption.innerHTML =
+texts[0];
+
+bgImage.style.backgroundImage =
+"url('img1.jpg')";
+
+function goNext(){
+
+  images[index]
+  .classList.remove("active");
+
+  index++;
+
+  if(index >= images.length){
+
+    showEnding();
+
+    return;
+
+  }
+
+  images[index]
+  .classList.add("active");
+
+  caption.innerHTML =
+  texts[index];
+
+  bgImage.style.backgroundImage =
+  `url('img${index+1}.jpg')`;
+
+  bgImage.style.animation =
+  "none";
+
+  void bgImage.offsetWidth;
+
+  bgImage.style.animation =
+  "bgZoom 8s linear forwards";
+
+  document
+  .getElementById("memoryCounter")
+  .innerHTML =
+  `Memory ${
+    String(index+1).padStart(2,'0')
+  } / 16`;
+
+}
+
+document
+.getElementById("slider")
+.addEventListener("click",goNext);
+
+/* SPARKLES */
+
+const sparkles =
+document.getElementById("sparkles");
+
+for(let i=0;i<55;i++){
+
+  let s =
+  document.createElement("div");
+
+  s.className = "spark";
+
+  s.style.left =
+  Math.random()*100 + "vw";
+
+  s.style.top =
+  Math.random()*100 + "vh";
+
+  s.style.animationDuration =
+  (2 + Math.random()*4) + "s";
+
+  sparkles.appendChild(s);
+
+}
+
+/* HEARTS */
+
+setInterval(()=>{
+
+  let h =
+  document.createElement("div");
+
+  h.className = "heart";
+
+  const arr = [
+  "","","",""
+  ];
+
+  h.innerHTML =
+  arr[Math.floor(Math.random()*arr.length)];
+
+  h.style.left =
+  Math.random()*100 + "vw";
+
+  h.style.fontSize =
+  (14 + Math.random()*18) + "px";
+
+  h.style.animationDuration =
+  (7 + Math.random()*6) + "s";
+
+  document
+  .getElementById("bgRain")
+  .appendChild(h);
+
+  setTimeout(()=>{
+
+    h.remove();
+
+  },14000);
+
+},500);
+
+/* CLOCK */
+
+function updateClock(){
+
+  document
+  .getElementById("liveClock")
+  .innerHTML =
+  new Date().toLocaleString();
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+/* ENDING */
+
+function showEnding(){
+
+  const note =
+  document.createElement("div");
+
+  note.id = "lastNote";
+
+  note.innerHTML = `
+
+  <div class="lastNoteCard">
+
+    <div class="lastTitle">
+      A Small Note For You 
+    </div>
+
+    <div class="lastLines">
+
+      Maybe birthdays are just dates for the world… <br><br>
+
+      But for me,<br>
+      this day gave me the person<br>
+      who changed my ordinary life<br>
+      into something softer,<br>
+      calmer,<br>
+      warmer… <br><br>
+
+      Thank you for existing.<br><br>
+
+      And no matter where life goes,<br>
+      a part of my heart<br>
+      will always whisper your name quietly 
+
+    </div>
+
+  </div>
+
+  `;
+
+  document.body.appendChild(note);
+
+  setTimeout(()=>{
+
+    note.style.opacity = "1";
+
+  },500);
+
+  setTimeout(()=>{
+
+    document
+    .getElementById("endingScene")
+    .style.opacity = "1";
+
+    document
+    .getElementById("endingScene")
+    .style.pointerEvents = "all";
+
+  },7000);
+
+}
+
+/* FINAL */
+
+function playFinal(){
+
+  document
+  .getElementById("finalWish")
+  .style.opacity = "1";
+
+  const note =
+  document.getElementById("lastNote");
+
+  if(note){
+
+    note.style.opacity = "0";
+
+    setTimeout(()=>{
+
+      note.style.display = "none";
+
+    },1000);
+
+  }
+
+  setTimeout(()=>{
+
+    const wishBox =
+    document.getElementById("wishBox");
+
+    wishBox.style.opacity = "1";
+
+    wishBox.style.pointerEvents = "all";
+
+  },1200);
+
+}
+
+/* SECRET */
+
+let taps = 0;
+
+document.body.addEventListener(
+"click",
+()=>{
+
+  taps++;
+
+  if(taps >= 5){
+
+    const s =
+    document.getElementById(
+    "secretMessage"
+    );
+
+    s.style.opacity = "1";
+
+    setTimeout(()=>{
+
+      s.style.opacity = "0";
+
+      taps = 0;
+
+    },2500);
+
+  }
+
+});
+
+/* SEND WISH */
+
+function sendWish(){
+
+  const wish =
+  document
+  .getElementById("wishText")
+  .value;
+
+  if(wish.trim() == ""){
+
+    alert("Write something ");
+
+    return;
+
+  }
+
+  const msg =
+  ` Birthday Wish \n\n${wish}`;
+
+  window.open(
+  `https://wa.me/917000229362?text=${encodeURIComponent(msg)}`,
+  "_blank"
+  );
+
+}
+
+</script>
+
+</body>
+</html>
